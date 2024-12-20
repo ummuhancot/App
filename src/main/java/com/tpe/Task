@@ -1,0 +1,44 @@
+Gönderdiğiniz açıklamaya ve görsele dayanarak, tasarımınızda modüler bir yapı oluşturmak için aşağıdaki görevleri oluşturuyorum. Bu görevler, pakete ve sınıflara uygun olarak düzenlenecek:
+Görevler:
+1. Kullanıcı Yönetimi (user_management)
+Kullanıcı hesapları için User sınıfı oluşturun:
+Özellikler: id, name, email, password, address, role.
+Rolleri (enum): CUSTOMER, ADMIN.
+Kullanıcı ekleme, düzenleme ve silme işlemlerini sağlayan metotlar ekleyin.
+Kullanıcı verilerini Map<String, User> içinde yönetin (key: email).
+Giriş doğrulama işlemi ekleyin.
+2. Ürün Yönetimi (product_management)
+Product sınıfı oluşturun:
+Özellikler: id, name, category, price, stock, description.
+Metotlar: Stok kontrolü, fiyat güncelleme.
+Ürünleri tutmak için Map<Integer, Product> kullanın (key: ürün ID'si).
+Ürün listeleme, arama ve kategori bazlı filtreleme metotları oluşturun.
+3. Alışveriş Sepeti (cart_management)
+Cart sınıfını oluşturun:
+Özellikler: userId, products (Map<Integer, Integer>, key: ürün ID'si, value: miktar).
+Metotlar: Ürün ekleme, silme, toplam hesaplama.
+Sepet toplam fiyatını ve miktarlarını dinamik hesaplayın.
+4. Sipariş Yönetimi (order_management)
+Order sınıfını oluşturun:
+Özellikler: id, userId, products (Map<Integer, Integer>), date, status.
+Durumları (enum): PREPARING, SHIPPED, DELIVERED.
+Sipariş verilerini Map<Integer, Order> içinde tutun (key: sipariş ID'si).
+Sipariş oluşturma ve durum güncelleme işlemleri sağlayın.
+5. Envanter Yönetimi (inventory_management)
+InventoryManager sınıfını oluşturun:
+Metotlar: Ürün ekleme, silme ve stok güncelleme.
+Stok bitişinde otomatik bildirim veya rezerve edilebilirlik ekleyin.
+6. Yedekleme Yönetimi (backup_management)
+BackupManager sınıfını oluşturun:
+Özellikler: Bellekteki verileri (Product, Order, User) yedekleyen bir mekanizma.
+Metotlar: JSON veya CSV formatında yedekleme ve geri yükleme.
+Yedekleme işlemini düzenli aralıklarla otomatik çalıştırın.
+7. Ek Özellikler
+Kampanya ve İndirim Yönetimi:Kampanya sınıfı (Campaign) oluşturun ve belirli ürünlere indirim uygulama metodu ekleyin.
+Kargo Takip Sistemi:Siparişlere trackingNumber özelliği ekleyin ve kargo durumunu takip edin.
+Raporlama:ReportService sınıfını oluşturun ve satış istatistiklerini yönetin (örneğin, toplam satış, en çok satan ürün).
+8. Teknoloji Seçimi ve Entegrasyon
+Java dilini kullanarak yukarıdaki modülleri sınıflara ayırın.
+Veri tabanı olarak MySQL kullanın ve Hibernate ile entegre edin.
+JSON formatında dosya yedekleme gerçekleştirin.
+Eğer detaylı açıklama veya başka ekleme isterseniz, düzenleyebilirim.
