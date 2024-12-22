@@ -13,7 +13,7 @@ public class UserService {
     List<User> userList = new ArrayList<>();
     List<Address> addressList = new ArrayList<>();
 
-    public void register() {
+    public User register() {
 
         System.out.println("Lütfen Adınızı Giriniz:");
         String name = scanner.nextLine();
@@ -47,21 +47,21 @@ public class UserService {
 
         // Kullanıcı oluştur ve adresi bağla
         User user = new User(name, lastname, telefonNo, email, password, adres);
-        userList.add(user);
+
 
         // Adresi adresListesine ekle (isteğe bağlı)
-        addressList.add(adres);
 
         System.out.println("Kullanıcı başarıyla eklendi!");
         System.out.println(user); // Kullanıcının bilgileri yazdırılır
         System.out.println(adres);
 
+        return user;
     }
 
-
-
-
-
+    public void addUser(User newUser, Address newAdress) {
+        userList.add(newUser);
+        addressList.add(newAdress);
+    }
 
 
 
