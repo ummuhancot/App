@@ -1,13 +1,17 @@
 package com.tpe.controller;
 
+import com.tpe.service.UserService;
+
 import java.util.Scanner;
 
 public class App {
 
     public static Scanner input = new Scanner(System.in);
 
+   public static UserService servic = new UserService();
 
     public static void displayAppMenu() {
+
 
 
 
@@ -162,6 +166,7 @@ public class App {
 
             switch (select) {
                 case 1:
+                    servic.register();
                  //müsteri Kayit Islemleri
                     break;
                 case 2:

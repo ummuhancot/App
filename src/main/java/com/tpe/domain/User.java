@@ -1,5 +1,10 @@
 package com.tpe.domain;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class User {
 
     private Integer userId;
@@ -8,10 +13,20 @@ public class User {
     private String userEmail;
     private String userPassword;
     private String usertelefonNo;
+
     private Address adres;
 
-    public User() {
+    private List<User> userList = new ArrayList<>();
+
+
+    public User(List<User> userList) {
+        this.userList = userList;
     }
+
+    public User(String name, String lastname, String telefonNo, String email, String password, Address adres) {
+    }
+
+
 
     public User(Integer userId, String userName, String userLastname, String userEmail, String userPassword, String usertelefonNo, Address adres) {
         this.userId = userId;
@@ -22,6 +37,7 @@ public class User {
         this.usertelefonNo = usertelefonNo;
         this.adres = adres;
     }
+
 
     public Integer getUserId() {
         return userId;
@@ -91,4 +107,7 @@ public class User {
                 ", adres=" + adres +
                 '}';
     }
+
+
+
 }

@@ -1,5 +1,8 @@
 package com.tpe.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Address {
 
 
@@ -11,8 +14,13 @@ public class Address {
 
     private String zipcode;
 
+    public Map<String,String> userInfo = new HashMap<>(); //country , city
 
-    public Address() {
+    public Address(String adress) {
+    }
+
+    public Address(Map<String, String> userInfo) {
+        this.userInfo = userInfo;
     }
 
     public Address(String street, String city, String country, String zipcode) {
@@ -63,4 +71,6 @@ public class Address {
                 ", zipcode='" + zipcode + '\'' +
                 '}';
     }
+
+
 }
