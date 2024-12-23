@@ -6,15 +6,6 @@ public class Admin {
     private String email;//null
     private String password;//null
 
-    public Admin() {
-    }
-
-    public Admin(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
     public String getName() {
         return name;
     }

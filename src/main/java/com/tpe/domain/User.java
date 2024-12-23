@@ -1,9 +1,7 @@
 package com.tpe.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class User {
 
@@ -15,17 +13,28 @@ public class User {
     private String usertelefonNo;
 
     private Address adres;
+    private Sepet sepet;
 
-    private List<User> userList = new ArrayList<>();
+    private KullanıcıOdaklıAlanlar kullanıcıOdaklıAlanlar;
 
-
-    public User(List<User> userList) {
-        this.userList = userList;
+    public KullanıcıOdaklıAlanlar getKullanıcıOdaklıAlanlar() {
+        return kullanıcıOdaklıAlanlar;
     }
 
-    public User(String name, String lastname, String telefonNo, String email, String password, Address adres) {
+    public void setKullanıcıOdaklıAlanlar(KullanıcıOdaklıAlanlar kullanıcıOdaklıAlanlar) {
+        this.kullanıcıOdaklıAlanlar = kullanıcıOdaklıAlanlar;
     }
 
+    public Sepet getSepet() {
+        return sepet;
+    }
+
+    public void setSepet(Sepet sepet) {
+        this.sepet = sepet;
+    }
+
+    public User() {
+    }
 
 
     public User(Integer userId, String userName, String userLastname, String userEmail, String userPassword, String usertelefonNo, Address adres) {
@@ -36,6 +45,7 @@ public class User {
         this.userPassword = userPassword;
         this.usertelefonNo = usertelefonNo;
         this.adres = adres;
+
     }
 
 
@@ -107,7 +117,5 @@ public class User {
                 ", adres=" + adres +
                 '}';
     }
-
-
 
 }

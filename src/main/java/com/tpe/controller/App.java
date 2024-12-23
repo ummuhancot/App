@@ -1,10 +1,7 @@
 package com.tpe.controller;
 
-import com.tpe.domain.Address;
-import com.tpe.domain.AppInterface;
-import com.tpe.domain.Product;
-import com.tpe.domain.User;
-import com.tpe.service.ProductService;
+
+import com.tpe.service.AdminService;
 import com.tpe.service.UserService;
 
 import java.util.LinkedHashMap;
@@ -16,8 +13,6 @@ public class App {
     public static Scanner input = new Scanner(System.in);
 
     public static UserService servic = new UserService();
-    public static Product product = new Product();
-    public static ProductService productService = new ProductService();
 
     public static void displayAppMenu() {
 
@@ -65,8 +60,7 @@ public class App {
         while (!isExist) {
             System.out.println("========================================================");
             System.out.println("1-Admin Islemleri: ");
-            System.out.println("2-Kayitli admin girisi");
-            System.out.println("3.Admin Kayit Olma");
+            System.out.println("2.Admin Kayit Olma");
             System.out.println("0-ÇIKIŞ");
 
             int select = input.nextInt();
@@ -76,9 +70,10 @@ public class App {
                 case 1:
                     KayitliAdminGirisi();
                     break;
-                case 2:
-                    //admin kayıt olma methodunu cağır
 
+                case 2:
+                    AdminService adminService = new AdminService();
+                    adminService.Kayıt();
                     break;
                 case 0:
                     isExist = true;
@@ -99,21 +94,18 @@ public class App {
         int select;
         boolean isExist = false;
 
-        Map<String, Product> products = new LinkedHashMap();
         while (!isExist) {
 
 
             System.out.println("========= Depo Yönetim Sistemi ==========");
             System.out.println("1- Bir ürün tanımlayın");
-            System.out.println("2- Ürünleri listele");
-            System.out.println("3- Bir ürün giriniz");
-            System.out.println("4- Rafa bir ürün yerleştirin");
-            System.out.println("5- Ürün çıktısı");
-            System.out.println("6- Bir ürünü kaldırın");
-            System.out.println("7- Tüm ürünleri temizle");
-            System.out.println("8- Ana menüye dön");
+            System.out.println("2- id verilen ürünü listeleme ürün listele");
+            System.out.println("3- Tüm ürünleri listeleyiniz");
+            System.out.println("4- id si verilen ürünü silme ");
+            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
+            System.out.println("6- Ana menüye dön");
             System.out.println("0- ÇIKIŞ");
-            System.out.print("Bir Seçenek Seçin: ");
+
 
             select = input.nextInt();
             input.nextLine();
@@ -124,33 +116,27 @@ public class App {
 
                         System.out.println("1- Bir ürün tanımlayın");
 
-                        productService.addProduct(products) ;
                         break;
                     case 2:
-                        System.out.println("2- Ürünleri listele");
+                        System.out.println("2- id si verilen Ürünleri listele");
 
                         break;
                     case 3:
-                        System.out.println("3- Bir ürün giriniz");
+                        System.out.println("3- tüm ürünleri listeleyiniz");
 
                         break;
                     case 4:
-                        System.out.println("4- Rafa bir ürün yerleştirin");
+                        System.out.println("4- id si verilen ürünü silme ");
+
 
                         break;
+
                     case 5:
-                        System.out.println("5- Ürün çıktısı");
+                        System.out.println("6- Satın alınan ürünleri görüntüleme ve kargoya verme");
 
                         break;
+
                     case 6:
-                        System.out.println("6- Bir ürünü kaldırın");
-
-                        break;
-                    case 7:
-                        System.out.println("7- Tüm ürünleri temizle");
-
-                        break;
-                    case 8:
                         System.out.println("Ana menüye yönlendiriliyorsunuz");
                         displayAppMenu();
                     case 0:
@@ -166,12 +152,17 @@ public class App {
             public static void MüsteriIslemleriMethod(){
                 boolean isExist=false;
                 while (!isExist) {
+
                     System.out.println("========================================================");
                     System.out.println("1-müsteri Kayit Islemleri");
                     System.out.println("2-kayıtlı müsteri menüsü Ana menüye yönlendirildi ");
-                    System.out.println("3-Urun secimi ve Alisveris Sepetine Ekleme");
-                    System.out.println("4-tek bir ürünü listeleme id si verilen(ürün arıyor)");
-                    System.out.println("5-Siparis Tamamlama ve Odeme Islemleri");
+                    System.out.println("3-tek bir ürünü listeleme id si verilen(ürün arıyor)");
+                    System.out.println("4-Urun secimi ve Alisveris Sepetine Ekleme");
+                    System.out.println("5-Kargo secimi ve ödeme secenekleri");
+                    System.out.println("6-Urun iptal ve Ürün iade");
+                    System.out.println("7-Siparis Tamamlama ve Odeme Islemleri");
+                    System.out.println("8-Alınan ürünün Kargo durumunu görüntüleme");
+                    System.out.println("9-Urun degerlendirme ve yorum");
                     System.out.println("0-ÇIKIŞ");
 
                     int select = input.nextInt();
@@ -195,6 +186,14 @@ public class App {
                             break;
                         case 5:
                             //Siparis Tamamlama ve Odeme Islemleri
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            break;
+                        case 9:
                             break;
                         case 0:
                             isExist = true;
@@ -224,7 +223,9 @@ public class App {
 
                     switch (select) {
                         case 1:
-
+                            //adminin tek bir ürünü listele methodunu cağırıcaz
+                            //adminin tüm ürünleri listele methodunu cağrıcaz
+                            //ik ürün kayıt yapcaz ürün listeleme methodunu cağrıcaz admin kısmından
                             //kayıtlı olmayan kullanıcı icin menu Ürün görüntüleme
 
                             break;
@@ -233,6 +234,8 @@ public class App {
                             break;
                         case 3:
                             //müsteri Kayit Islemleri yönlendir
+                            System.out.println("Kayıt olmak icin 1 e basınız.");
+                            MüsteriIslemleriMethod();
                             break;
                         case 0:
                             isExist = true;

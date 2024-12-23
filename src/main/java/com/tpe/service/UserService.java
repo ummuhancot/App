@@ -6,14 +6,16 @@ import com.tpe.domain.User;
 import java.util.*;
 
 public class UserService {
-
-
     public Scanner scanner = new Scanner(System.in);
 
     List<User> userList = new ArrayList<>();
     List<Address> addressList = new ArrayList<>();
 
     public User register() {
+        System.out.println("Lütfen Id giriniz :");
+        String id = scanner.nextLine(); // Kullanıcıdan String olarak alınır
+        int userId = Integer.valueOf(id); // String, int'e dönüştürülüyor
+
 
         System.out.println("Lütfen Adınızı Giriniz:");
         String name = scanner.nextLine();
@@ -44,23 +46,19 @@ public class UserService {
 
         // Adres oluştur
         Address adres = new Address(city, country, street, zipcode);
-
+        addressList.add(adres);
         // Kullanıcı oluştur ve adresi bağla
-        User user = new User(name, lastname, telefonNo, email, password, adres);
-
+        User user = new User(userId,name, lastname, telefonNo, email, password, adres);
+        userList.add(user);
 
         // Adresi adresListesine ekle (isteğe bağlı)
 
         System.out.println("Kullanıcı başarıyla eklendi!");
-        System.out.println(user); // Kullanıcının bilgileri yazdırılır
+        System.out.println("ID listeye eklendi: " + userId);
+        System.out.println(user);// Kullanıcının bilgileri yazdırılır
         System.out.println(adres);
 
         return user;
-    }
-
-    public void addUser(User newUser, Address newAdress) {
-        userList.add(newUser);
-        addressList.add(newAdress);
     }
 
 
