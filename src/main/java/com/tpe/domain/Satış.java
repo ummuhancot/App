@@ -1,4 +1,5 @@
 package com.tpe.domain;
+
 /*Satış İşlemleri:
 Satış Tarihi (Sale Date): Ürünün satış işleminin gerçekleştiği tarih.
 

@@ -7,24 +7,23 @@ package com.tpe.domain;
 10. **Kol Tipi (Sleeve Type)**: Ürünün kol uzunluğu veya tipi. Örn: "Kısa Kol", "Uzun Kol".
 11. **Boy Uzunluğu (Length)**: Ürünün uzunluğu. Örn: "Midi", "Mini", "Uzun".
 */
-public class ÜrünÖzellikleri {
+public class UrunOzellikleri {
+
 
     private String beden;
     private String renk;
     private String malzeme;
-    private String kesim;
     private String kolTipi;
     private String boyUzunlugu;
 
 
-    public ÜrünÖzellikleri() {
+    public UrunOzellikleri() {
     }
 
-    public ÜrünÖzellikleri(String beden, String renk, String malzeme, String kesim, String kolTipi, String boyUzunlugu) {
+    public UrunOzellikleri(String beden, String renk, String malzeme, String kolTipi, String boyUzunlugu) {
         this.beden = beden;
         this.renk = renk;
         this.malzeme = malzeme;
-        this.kesim = kesim;
         this.kolTipi = kolTipi;
         this.boyUzunlugu = boyUzunlugu;
     }
@@ -54,13 +53,6 @@ public class ÜrünÖzellikleri {
         this.malzeme = malzeme;
     }
 
-    public String getKesim() {
-        return kesim;
-    }
-
-    public void setKesim(String kesim) {
-        this.kesim = kesim;
-    }
 
     public String getKolTipi() {
         return kolTipi;
@@ -84,7 +76,6 @@ public class ÜrünÖzellikleri {
                 "beden='" + beden + '\'' +
                 ", renk='" + renk + '\'' +
                 ", malzeme='" + malzeme + '\'' +
-                ", kesim='" + kesim + '\'' +
                 ", kolTipi='" + kolTipi + '\'' +
                 ", boyUzunlugu='" + boyUzunlugu + '\'' +
                 '}';

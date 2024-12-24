@@ -1,9 +1,12 @@
 package com.tpe.controller;
 
 
+import com.tpe.domain.Urun;
 import com.tpe.service.AdminService;
+import com.tpe.service.UrunService;
 import com.tpe.service.UserService;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,6 +15,8 @@ public class App {
 
     public static Scanner input = new Scanner(System.in);
 
+    public static Urun urun = new Urun();
+    public static UrunService urunService = new UrunService();
     public static UserService servic = new UserService();
 
     public static void displayAppMenu() {
@@ -89,7 +94,7 @@ public class App {
 
     }
 
-
+    static Map<String, Urun> products = new HashMap<>();
     public static void KayitliAdminGirisi() {
         int select;
         boolean isExist = false;
@@ -102,7 +107,7 @@ public class App {
             System.out.println("2- id verilen ürünü listeleme ürün listele");
             System.out.println("3- Tüm ürünleri listeleyiniz");
             System.out.println("4- id si verilen ürünü silme ");
-            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
+            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");//
             System.out.println("6- Ana menüye dön");
             System.out.println("0- ÇIKIŞ");
 
@@ -116,10 +121,12 @@ public class App {
 
                         System.out.println("1- Bir ürün tanımlayın");
 
+                        urunService.addProduct(products);
+
                         break;
                     case 2:
                         System.out.println("2- id si verilen Ürünleri listele");
-
+                        urunService.listProduct(products);
                         break;
                     case 3:
                         System.out.println("3- tüm ürünleri listeleyiniz");
@@ -149,6 +156,8 @@ public class App {
 
         }
     }
+
+
             public static void MüsteriIslemleriMethod(){
                 boolean isExist=false;
                 while (!isExist) {
@@ -159,7 +168,7 @@ public class App {
                     System.out.println("3-tek bir ürünü listeleme id si verilen(ürün arıyor)");
                     System.out.println("4-Urun secimi ve Alisveris Sepetine Ekleme");
                     System.out.println("5-Kargo secimi ve ödeme secenekleri");
-                    System.out.println("6-Urun iptal ve Ürün iade");
+                    System.out.println("6-Urun iptal ve Urun iade");
                     System.out.println("7-Siparis Tamamlama ve Odeme Islemleri");
                     System.out.println("8-Alınan ürünün Kargo durumunu görüntüleme");
                     System.out.println("9-Urun degerlendirme ve yorum");
@@ -213,8 +222,8 @@ public class App {
                 boolean isExist = false;
                 while (!isExist) {
                     System.out.println("========================================================");
-                    System.out.println("1-kayıtlı olmayan kullanıcı icin menu Ürün görüntüleme");
-                    System.out.println("2-tek bir ürünü listeleme id si verilen(ürün arıyor)");
+                    System.out.println("1-kayıtlı olmayan kullanıcı icin menu Urun görüntüleme");
+                    System.out.println("2-tek bir urunun listeleme id si verilen(ürün arıyor)");
                     System.out.println("3-müsteri Kayit Islemleri yönlendir");
                     System.out.println("0-ÇIKIŞ");
 
@@ -226,7 +235,7 @@ public class App {
                             //adminin tek bir ürünü listele methodunu cağırıcaz
                             //adminin tüm ürünleri listele methodunu cağrıcaz
                             //ik ürün kayıt yapcaz ürün listeleme methodunu cağrıcaz admin kısmından
-                            //kayıtlı olmayan kullanıcı icin menu Ürün görüntüleme
+                            //kayıtlı olmayan kullanıcı icin menu Urun görüntüleme
 
                             break;
                         case 2:
@@ -251,7 +260,6 @@ public class App {
                 }
 
             }
-
 
 
 }

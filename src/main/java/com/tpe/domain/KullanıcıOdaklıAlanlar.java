@@ -1,10 +1,8 @@
 package com.tpe.domain;
-
 /*### Kullanıcı Odaklı Alanlar:
 23. **Değerlendirme (Rating)**: Kullanıcıların verdiği yıldız puanı.
 24. **Yorumlar (Reviews)**: Kullanıcı yorumları.*/
 public class KullanıcıOdaklıAlanlar {
-
 
     private int degerlendirme;
     private String yorumlar;

@@ -1,7 +1,6 @@
 package com.tpe.service;
 
 import com.tpe.domain.Admin;
-import com.tpe.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;

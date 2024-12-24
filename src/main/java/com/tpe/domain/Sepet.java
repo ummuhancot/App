@@ -1,4 +1,5 @@
 package com.tpe.domain;
+
 /*Sepet İşlemleri:
 Sepete Eklenen Miktar (Cart Quantity): Kullanıcının sepete eklediği ürün miktarı.
 

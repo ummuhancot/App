@@ -3,50 +3,56 @@ package com.tpe.domain;
 * Bir kıyafet ürünü için kullanabileceğiniz alanlar (fields) şunlardır:
 
 ### Temel Alanlar:
-1. **Ürün Adı (Product Name)**: Ürünün adı. Örn: "Klasik Beyaz Gömlek"
-2. **Ürün Kodu (Product Code)**: Stok takibi ve benzersizlik için özel kod. Örn: "BG-2024-001"
+1. **Urun Adı (Product Name)**: Ürünün adı. Örn: "Klasik Beyaz Gömlek"
+2. **Urun Kodu (Product Code)**: Stok takibi ve benzersizlik için özel kod. Örn: "BG-2024-001"
 3. **Kategori (Category)**: Ürünün hangi kategoride yer aldığı. Örn: "Kadın Gömlek", "Erkek Pantolon".
 4. **Fiyat (Price)**: Ürünün satış fiyatı. Örn: "499.99 TL"
 5. **Para Birimi (Currency)**: Fiyatın hangi para biriminde olduğu. Örn: "TL", "USD".
 */
-public class Ürün {
+public class Urun {
 
+    public static int counter=0;
     private String ÜrünAdı;
     private String ÜrünKodu;
     private String Kategori;
-    private String Fiyat;
-    private String ParaBirimi;
+    private Integer Fiyat;
 
-    private ÜrünTeknikAlanı ürünTeknikAlanı;
-    private ÜrünÖzellikleri ürünÖzellikleri;
+    private UrunTeknikAlanı urunTeknikAlanı;
+    private UrunOzellikleri urunOzellikleri;
 
-
-    public ÜrünTeknikAlanı getÜrünTeknikAlanı() {
-        return ürünTeknikAlanı;
+    public static int getCounter() {
+        return counter;
     }
 
-    public void setÜrünTeknikAlanı(ÜrünTeknikAlanı ürünTeknikAlanı) {
-        this.ürünTeknikAlanı = ürünTeknikAlanı;
+    public static void setCounter(int counter) {
+        Urun.counter = counter;
     }
 
-    public ÜrünÖzellikleri getÜrünÖzellikleri() {
-        return ürünÖzellikleri;
+    public UrunTeknikAlanı getUrunTeknikAlanı() {
+        return urunTeknikAlanı;
     }
 
-    public void setÜrünÖzellikleri(ÜrünÖzellikleri ürünÖzellikleri) {
-        this.ürünÖzellikleri = ürünÖzellikleri;
+    public void setUrunTeknikAlanı(UrunTeknikAlanı urunTeknikAlanı) {
+        this.urunTeknikAlanı = urunTeknikAlanı;
+    }
+
+    public UrunOzellikleri getUrunOzellikleri() {
+        return urunOzellikleri;
+    }
+
+    public void setUrunOzellikleri(UrunOzellikleri urunOzellikleri) {
+        this.urunOzellikleri = urunOzellikleri;
     }
 
 
-    public Ürün() {
+    public Urun() {
     }
 
-    public Ürün(String ürünAdı, String ürünKodu, String kategori, String fiyat, String paraBirimi) {
+    public Urun(String ürünAdı, String kategori, Integer fiyat) {
         this.ÜrünAdı = ürünAdı;
-        this.ÜrünKodu = ürünKodu;
         this.Kategori = kategori;
         this.Fiyat = fiyat;
-        this.ParaBirimi = paraBirimi;
+
     }
 
     public String getÜrünAdı() {
@@ -73,30 +79,23 @@ public class Ürün {
         Kategori = kategori;
     }
 
-    public String getFiyat() {
+    public Integer getFiyat() {
         return Fiyat;
     }
 
-    public void setFiyat(String fiyat) {
+    public void setFiyat(Integer fiyat) {
         Fiyat = fiyat;
     }
 
-    public String getParaBirimi() {
-        return ParaBirimi;
-    }
 
-    public void setParaBirimi(String paraBirimi) {
-        ParaBirimi = paraBirimi;
-    }
 
     @Override
     public String toString() {
-        return "Ürün{" +
-                "ÜrünAdı='" + ÜrünAdı + '\'' +
+        return "Urun{" +
+                "UrunAdı='" + ÜrünAdı + '\'' +
                 ", ÜrünKodu='" + ÜrünKodu + '\'' +
                 ", Kategori='" + Kategori + '\'' +
                 ", Fiyat='" + Fiyat + '\'' +
-                ", ParaBirimi='" + ParaBirimi + '\'' +
                 '}';
     }
 }

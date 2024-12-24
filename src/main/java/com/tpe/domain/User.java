@@ -17,25 +17,13 @@ public class User {
 
     private KullanıcıOdaklıAlanlar kullanıcıOdaklıAlanlar;
 
-    public KullanıcıOdaklıAlanlar getKullanıcıOdaklıAlanlar() {
+    public com.tpe.domain.KullanıcıOdaklıAlanlar getKullanıcıOdaklıAlanlar() {
         return kullanıcıOdaklıAlanlar;
     }
 
-    public void setKullanıcıOdaklıAlanlar(KullanıcıOdaklıAlanlar kullanıcıOdaklıAlanlar) {
+    public void setKullanıcıOdaklıAlanlar(com.tpe.domain.KullanıcıOdaklıAlanlar kullanıcıOdaklıAlanlar) {
         this.kullanıcıOdaklıAlanlar = kullanıcıOdaklıAlanlar;
     }
-
-    public Sepet getSepet() {
-        return sepet;
-    }
-
-    public void setSepet(Sepet sepet) {
-        this.sepet = sepet;
-    }
-
-    public User() {
-    }
-
 
     public User(Integer userId, String userName, String userLastname, String userEmail, String userPassword, String usertelefonNo, Address adres) {
         this.userId = userId;
@@ -45,9 +33,7 @@ public class User {
         this.userPassword = userPassword;
         this.usertelefonNo = usertelefonNo;
         this.adres = adres;
-
     }
-
 
     public Integer getUserId() {
         return userId;
@@ -105,17 +91,11 @@ public class User {
         this.adres = adres;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", userLastname='" + userLastname + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", usertelefonNo='" + usertelefonNo + '\'' +
-                ", adres=" + adres +
-                '}';
+    public com.tpe.domain.Sepet getSepet() {
+        return sepet;
     }
 
+    public void setSepet(com.tpe.domain.Sepet sepet) {
+        this.sepet = sepet;
+    }
 }
