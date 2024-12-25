@@ -3,22 +3,19 @@ package com.tpe.service;
 import com.tpe.domain.*;
 
 import java.time.LocalDate;
-import java.util.InputMismatchException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
-public class UrunService implements UrunInterface {
+public class UrunService  {
     // Ürünlerin saklanacağı Map, LinkedHashMap kullanılarak eklenme sırası korunur
-    Map<String, Urun> products = new LinkedHashMap<>();
-    Scanner sc = new Scanner(System.in);
-   // UrunSaveService saveService = new UrunSaveService(); // Ürünlerin dosyaya kaydedilmesi için servis sınıfı
+    public static Map<String, Urun> products = new LinkedHashMap<>();
+    public static Scanner sc = new Scanner(System.in);
+    // UrunSaveService saveService = new UrunSaveService(); // Ürünlerin dosyaya kaydedilmesi için servis sınıfı
     // Yapıcı metot, uygulama başlarken dosyadan ürünleri yükler
 
 
 
-    @Override
-    public void addProduct(Map<String, Urun> products) {
+
+    public static void addProduct(Map<String, Urun> products) {
 
 
         int select = 1;
@@ -59,7 +56,7 @@ public class UrunService implements UrunInterface {
             // Aynı ürünün mevcut olup olmadığını kontrol et
             for (Urun w : products.values()) {
                 if (w.getÜrünAdı().equals(ÜrünAdı)  && w.getKategori().equals(kategori)&&
-                w.getFiyat().equals(fiyat)) {
+                        w.getFiyat().equals(fiyat)) {
                     System.out.println("Bu ürün zaten mevcut. Bunun yerine miktarını güncelleyebilirsiniz.");
                     return;
                 }
@@ -81,27 +78,36 @@ public class UrunService implements UrunInterface {
             } while (productQuantity <= 0);
 
 
-            Urun urun = new Urun(ÜrünAdı,kategori,fiyat);
+            Urun urun = new Urun(ÜrünAdı,kategori,fiyat,new UrunTeknikAlanı(),new UrunOzellikleri());
             UrunOzellikleri urunOzellikleri = new UrunOzellikleri(Beden,renk,malzeme,ÜrünKolTipi,ÜrünBoyUzunluğu);
             UrunTeknikAlanı urunTeknikAlanı = new UrunTeknikAlanı(ÜrünStokDurumu,ÜrünÜretici);
 
+
+
             // Ürün özelliklerini ayarla ve ID'yi oluştur
             urun.setÜrünAdı(ÜrünAdı);
+            urun.setKategori(kategori);
+            urun.setFiyat(fiyat);
+            urunOzellikleri.setBeden(Beden);
+            urunOzellikleri.setMalzeme(malzeme);
+            urunOzellikleri.setRenk(renk);
+            urunOzellikleri.setKolTipi(ÜrünKolTipi);
+            urunOzellikleri.setBoyUzunlugu(ÜrünBoyUzunluğu);
+            urun.setUrunOzellikleri(urunOzellikleri);
             urunTeknikAlanı.setUretici(ÜrünÜretici);
             urunTeknikAlanı.setStokDurumu(ÜrünStokDurumu);
+            urun.setUrunTeknikAlanı(urunTeknikAlanı);
             productId(urun);
-            products.put(urun.getÜrünKodu(),urun);
             // Ürün ID'sini ayarla
 
             // Ürünü Map'e ekle
             products.put(urun.getÜrünKodu(), urun);
-            products.put(urunOzellikleri.getBeden(),urun);
-            products.put(String.valueOf(urunTeknikAlanı.getStokDurumu()),urun);
 
             System.out.println(urun);
             System.out.println(urunOzellikleri);
             System.out.println(urunTeknikAlanı);
             System.out.println(urun.getÜrünKodu());
+
             // İşleme devam veya çıkış seçeneği sunma
             System.out.println("Press 1 to CONTINUE the process or 0 to EXIT.");
             try {
@@ -120,12 +126,12 @@ public class UrunService implements UrunInterface {
 
 
     // Ürün ID'sini oluşturur
-    public void productId(Urun urun) {
+    public static void productId(Urun urun) {
 
         try {
 
             // ID'yi ürün adı ve yıl bilgisiyle oluştur, counter'ı kullanarak benzersiz yap
-            urun.setÜrünKodu(urun.getÜrünAdı().toUpperCase().substring(0, 2) + LocalDate.now().getYear()+Urun.counter);
+            urun.setÜrünKodu(urun.getÜrünAdı().toUpperCase().substring(0,3) + LocalDate.now().getYear()+Urun.counter);
             Urun.counter++;
         } catch (StringIndexOutOfBoundsException e) {
             // Eğer ürün adı kısa ise "NULL" kullanarak ID oluştur
@@ -135,45 +141,55 @@ public class UrunService implements UrunInterface {
     }
 
 
-    @Override
-    public void listProduct(Map<String, Urun> urun) {
+/*
+    public void listProduct (List<Urun > urun){
 
-        for (Urun product: urun.values()) {
-
-            if (product.getUrunTeknikAlanı().getStokDurumu()==0){
-                System.err.println(product.getÜrünKodu());
-                System.err.println(product.getÜrünAdı());
-
-            } else  {
-                System.out.println(product.getÜrünKodu());
-                System.out.println(product.getÜrünAdı());
-
+        for (Urun product : urun) {
+            // Eğer ürün miktarı 0 ise kırmızı renkte yazdır
+            if (product.getUrunTeknikAlanı().getStokDurumu() == 0) {
+                System.err.printf("stok bulunmamakta");
+            } else {
+                System.out.printf(product.getÜrünKodu(), product.getÜrünAdı(), product.getUrunTeknikAlanı().getUretici(), product.getUrunTeknikAlanı().getStokDurumu(), product.getFiyat(), product.getKategori());
             }
         }
 
     }
+    */
 
-    @Override
+    // ürünleri listeler
+    public static void listProduct(Map<String, Urun> products) {
+        List<Urun> urunList =new ArrayList<>(products.values());
+        for (Urun product : urunList) {
+            // Eğer ürün miktarı 0 ise kırmızı renkte yazdır
+            if (product.getUrunTeknikAlanı().getStokDurumu() == 0) {
+                System.err.println("\n"+product.getÜrünKodu()+"\n"+product.getÜrünAdı()+"\n"+product.getFiyat()+"\n"+product.getKategori()+"\n");
+            } else {
+                System.out.println("\n"+product.getÜrünKodu()+"\n"+product.getÜrünAdı()+"\n"+product.getFiyat()+"\n"+product.getKategori()+"\n");
+                System.err.println("calıştı");
+            }
+        }
+    }
+
     public void enterProduct(Map<String, Urun> products) {
 
     }
 
-    @Override
+
     public void putProductOnShelf(Map<String, Urun> products) {
 
     }
 
-    @Override
+
     public void productOutput(Map<String, Urun> products) {
 
     }
 
-    @Override
+
     public void removeProduct(Map<String, Urun> products) {
 
     }
 
-    @Override
+
     public void clearProducts(Map<String, Urun> products) {
 
     }

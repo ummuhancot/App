@@ -7,7 +7,7 @@ package com.tpe.domain;
 10. **Kol Tipi (Sleeve Type)**: Ürünün kol uzunluğu veya tipi. Örn: "Kısa Kol", "Uzun Kol".
 11. **Boy Uzunluğu (Length)**: Ürünün uzunluğu. Örn: "Midi", "Mini", "Uzun".
 */
-public class UrunOzellikleri {
+public class UrunOzellikleri  {
 
 
     private String beden;

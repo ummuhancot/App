@@ -6,10 +6,7 @@ import com.tpe.service.AdminService;
 import com.tpe.service.UrunService;
 import com.tpe.service.UserService;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -94,68 +91,60 @@ public class App {
 
     }
 
-    static Map<String, Urun> products = new HashMap<>();
+
     public static void KayitliAdminGirisi() {
+        Scanner input = new Scanner(System.in);
         int select;
         boolean isExist = false;
 
         while (!isExist) {
-
 
             System.out.println("========= Depo Yönetim Sistemi ==========");
             System.out.println("1- Bir ürün tanımlayın");
             System.out.println("2- id verilen ürünü listeleme ürün listele");
             System.out.println("3- Tüm ürünleri listeleyiniz");
             System.out.println("4- id si verilen ürünü silme ");
-            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");//
+            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
             System.out.println("6- Ana menüye dön");
             System.out.println("0- ÇIKIŞ");
-
 
             select = input.nextInt();
             input.nextLine();
 
+            switch (select) {
+                case 1:
+                    UrunService.addProduct(UrunService.products);
+                    break;
+                case 2:
+                    System.out.println("2- id si verilen Ürünleri listele");
+                    UrunService.listProduct(UrunService.products);
+                    break;
+                case 3:
+                    System.out.println("3- tüm ürünleri listeleyiniz");
 
-                switch (select) {
-                    case 1:
-
-                        System.out.println("1- Bir ürün tanımlayın");
-
-                        urunService.addProduct(products);
-
-                        break;
-                    case 2:
-                        System.out.println("2- id si verilen Ürünleri listele");
-                        urunService.listProduct(products);
-                        break;
-                    case 3:
-                        System.out.println("3- tüm ürünleri listeleyiniz");
-
-                        break;
-                    case 4:
-                        System.out.println("4- id si verilen ürünü silme ");
-
-
-                        break;
-
-                    case 5:
-                        System.out.println("6- Satın alınan ürünleri görüntüleme ve kargoya verme");
-
-                        break;
-
-                    case 6:
-                        System.out.println("Ana menüye yönlendiriliyorsunuz");
-                        displayAppMenu();
-                    case 0:
-                        System.out.println("Good byy...");
-                        isExist = true;
-                }
-
-
-
-
+                    break;
+                case 4:
+                    System.out.println("4- id si verilen ürünü silme ");
+                    // Implement silme işlemi burada
+                    break;
+                case 5:
+                    System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
+                    // Implement satın alma işlemi burada
+                    break;
+                case 6:
+                    System.out.println("Ana menüye yönlendiriliyorsunuz");
+                    // displayAppMenu(); // Uncomment if menu is defined elsewhere
+                    break;
+                case 0:
+                    System.out.println("Good bye...");
+                    isExist = true;
+                    break;
+                default:
+                    System.out.println("Geçersiz seçim, tekrar deneyin.");
+            }
         }
     }
+
 
 
             public static void MüsteriIslemleriMethod(){

@@ -11,7 +11,7 @@ package com.tpe.domain;
 */
 public class Urun {
 
-    public static int counter=0;
+    public static int counter=1;
     private String ÜrünAdı;
     private String ÜrünKodu;
     private String Kategori;
@@ -48,11 +48,14 @@ public class Urun {
     public Urun() {
     }
 
-    public Urun(String ürünAdı, String kategori, Integer fiyat) {
+
+    public Urun(String ürünAdı, String kategori, Integer fiyat, UrunTeknikAlanı urunTeknikAlanı, UrunOzellikleri urunOzellikleri) {
         this.ÜrünAdı = ürünAdı;
         this.Kategori = kategori;
         this.Fiyat = fiyat;
-
+        this.urunTeknikAlanı = urunTeknikAlanı;
+        this.urunOzellikleri = urunOzellikleri;
+        this.ÜrünKodu = "\uD83D\uDE08" + counter++;
     }
 
     public String getÜrünAdı() {

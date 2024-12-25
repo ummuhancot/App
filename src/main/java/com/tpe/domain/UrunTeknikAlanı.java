@@ -5,7 +5,7 @@ package com.tpe.domain;
 14. **SKU (Stok Birim Kodu)**: Depo takibi için benzersiz stok birim kodu.
 15. **Üretici (Manufacturer)**: Ürünün üreticisi veya markası.
 16. **Menşei (Origin)**: Ürünün üretildiği ülke.*/
-public class UrunTeknikAlanı {
+public class UrunTeknikAlanı  {
 
     private int stokDurumu;
     private String uretici;
