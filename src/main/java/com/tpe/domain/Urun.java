@@ -17,44 +17,30 @@ public class Urun {
     private String Kategori;
     private Integer Fiyat;
 
-    private UrunTeknikAlanı urunTeknikAlanı;
-    private UrunOzellikleri urunOzellikleri;
 
-    public static int getCounter() {
-        return counter;
-    }
+    private String beden;
+    private String renk;
+    private String malzeme;
+    private String kolTipi;
+    private Integer boyUzunlugu;
 
-    public static void setCounter(int counter) {
-        Urun.counter = counter;
-    }
-
-    public UrunTeknikAlanı getUrunTeknikAlanı() {
-        return urunTeknikAlanı;
-    }
-
-    public void setUrunTeknikAlanı(UrunTeknikAlanı urunTeknikAlanı) {
-        this.urunTeknikAlanı = urunTeknikAlanı;
-    }
-
-    public UrunOzellikleri getUrunOzellikleri() {
-        return urunOzellikleri;
-    }
-
-    public void setUrunOzellikleri(UrunOzellikleri urunOzellikleri) {
-        this.urunOzellikleri = urunOzellikleri;
-    }
-
+    private int stokDurumu;
+    private String uretici;
 
     public Urun() {
     }
 
-
-    public Urun(String ürünAdı, String kategori, Integer fiyat, UrunTeknikAlanı urunTeknikAlanı, UrunOzellikleri urunOzellikleri) {
+    public Urun(String ürünAdı, String kategori, Integer fiyat, String beden, String renk, String malzeme, String kolTipi, Integer boyUzunlugu, int stokDurumu, String uretici) {
         this.ÜrünAdı = ürünAdı;
         this.Kategori = kategori;
         this.Fiyat = fiyat;
-        this.urunTeknikAlanı = urunTeknikAlanı;
-        this.urunOzellikleri = urunOzellikleri;
+        this.beden = beden;
+        this.renk = renk;
+        this.malzeme = malzeme;
+        this.kolTipi = kolTipi;
+        this.boyUzunlugu = boyUzunlugu;
+        this.stokDurumu = stokDurumu;
+        this.uretici = uretici;
         this.ÜrünKodu = "\uD83D\uDE08" + counter++;
     }
 
@@ -90,15 +76,76 @@ public class Urun {
         Fiyat = fiyat;
     }
 
+    public String getBeden() {
+        return beden;
+    }
 
+    public void setBeden(String beden) {
+        this.beden = beden;
+    }
+
+    public String getRenk() {
+        return renk;
+    }
+
+    public void setRenk(String renk) {
+        this.renk = renk;
+    }
+
+    public String getMalzeme() {
+        return malzeme;
+    }
+
+    public void setMalzeme(String malzeme) {
+        this.malzeme = malzeme;
+    }
+
+    public String getKolTipi() {
+        return kolTipi;
+    }
+
+    public void setKolTipi(String kolTipi) {
+        this.kolTipi = kolTipi;
+    }
+
+    public Integer getBoyUzunlugu() {
+        return boyUzunlugu;
+    }
+
+    public void setBoyUzunlugu(Integer boyUzunlugu) {
+        this.boyUzunlugu = boyUzunlugu;
+    }
+
+    public int getStokDurumu() {
+        return stokDurumu;
+    }
+
+    public void setStokDurumu(int stokDurumu) {
+        this.stokDurumu = stokDurumu;
+    }
+
+    public String getUretici() {
+        return uretici;
+    }
+
+    public void setUretici(String uretici) {
+        this.uretici = uretici;
+    }
 
     @Override
     public String toString() {
         return "Urun{" +
-                "UrunAdı='" + ÜrünAdı + '\'' +
+                "ÜrünAdı='" + ÜrünAdı + '\'' +
                 ", ÜrünKodu='" + ÜrünKodu + '\'' +
                 ", Kategori='" + Kategori + '\'' +
-                ", Fiyat='" + Fiyat + '\'' +
+                ", Fiyat=" + Fiyat +
+                ", beden='" + beden + '\'' +
+                ", renk='" + renk + '\'' +
+                ", malzeme='" + malzeme + '\'' +
+                ", kolTipi='" + kolTipi + '\'' +
+                ", boyUzunlugu='" + boyUzunlugu + '\'' +
+                ", stokDurumu=" + stokDurumu +
+                ", uretici='" + uretici + '\'' +
                 '}';
     }
 }

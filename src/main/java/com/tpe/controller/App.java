@@ -104,8 +104,9 @@ public class App {
             System.out.println("2- id verilen ürünü listeleme ürün listele");
             System.out.println("3- Tüm ürünleri listeleyiniz");
             System.out.println("4- id si verilen ürünü silme ");
-            System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
-            System.out.println("6- Ana menüye dön");
+            System.out.println("5- Ürünleri filtreleme (max,min,A dan - Z ye )");
+            System.out.println("6- Satın alınan ürünleri görüntüleme ve kargoya verme");
+            System.out.println("7- Ana menüye dön");
             System.out.println("0- ÇIKIŞ");
 
             select = input.nextInt();
@@ -113,25 +114,32 @@ public class App {
 
             switch (select) {
                 case 1:
+                    System.out.println("1- Bir ürün tanımlayın");
                     UrunService.addProduct(UrunService.products);
                     break;
                 case 2:
                     System.out.println("2- id si verilen Ürünleri listele");
-                    UrunService.listProduct(UrunService.products);
+                    UrunService.listIdProduct(UrunService.products);
                     break;
                 case 3:
                     System.out.println("3- tüm ürünleri listeleyiniz");
-
+                    UrunService.enterProduct(UrunService.products);
                     break;
                 case 4:
                     System.out.println("4- id si verilen ürünü silme ");
+                    UrunService.deleteProductById(UrunService.products);
                     // Implement silme işlemi burada
                     break;
                 case 5:
+                    System.out.println("5- Ürünleri filtreleme (max,min,A dan - Z ye )");
+                    UrunService.AdminlistProductWithSorting(UrunService.products);
+
+                    break;
+                case 6:
                     System.out.println("5- Satın alınan ürünleri görüntüleme ve kargoya verme");
                     // Implement satın alma işlemi burada
                     break;
-                case 6:
+                case 7:
                     System.out.println("Ana menüye yönlendiriliyorsunuz");
                     // displayAppMenu(); // Uncomment if menu is defined elsewhere
                     break;
@@ -154,13 +162,14 @@ public class App {
                     System.out.println("========================================================");
                     System.out.println("1-müsteri Kayit Islemleri");
                     System.out.println("2-kayıtlı müsteri menüsü Ana menüye yönlendirildi ");
-                    System.out.println("3-tek bir ürünü listeleme id si verilen(ürün arıyor)");
-                    System.out.println("4-Urun secimi ve Alisveris Sepetine Ekleme");
-                    System.out.println("5-Kargo secimi ve ödeme secenekleri");
-                    System.out.println("6-Urun iptal ve Urun iade");
-                    System.out.println("7-Siparis Tamamlama ve Odeme Islemleri");
-                    System.out.println("8-Alınan ürünün Kargo durumunu görüntüleme");
-                    System.out.println("9-Urun degerlendirme ve yorum");
+                    System.out.println("3-Ürün ismine göre arama yap");
+                    System.out.println("4- Ürünleri filtreleme (max,min,A dan - Z ye )");
+                    System.out.println("5-Urun secimi ve Alisveris Sepetine Ekleme");
+                    System.out.println("6-Kargo secimi ve ödeme secenekleri");
+                    System.out.println("7-Urun iptal ve Urun iade");
+                    System.out.println("8-Siparis Tamamlama ve Odeme Islemleri");
+                    System.out.println("9-Alınan ürünün Kargo durumunu görüntüleme");
+                    System.out.println("10-Urun degerlendirme ve yorum");
                     System.out.println("0-ÇIKIŞ");
 
                     int select = input.nextInt();
@@ -168,30 +177,48 @@ public class App {
 
                     switch (select) {
                         case 1:
+                            System.out.println("1-müsteri Kayit Islemleri");
                             servic.register();
                             //müsteri Kayit Islemleri
                             break;
                         case 2:
+                            System.out.println("2-kayıtlı müsteri menüsü Ana menüye yönlendirildi ");
                             //kayıtlı müsteri menüsü
                             System.out.println("Ana menüye yönlendiriliyor");
                             MüsteriIslemleriMethod();
                             break;
                         case 3:
-                            //Urun secimi ve Alisveris Sepetine Ekleme
+                            System.out.println("3-Ürün ismine göre arama yap");
+                            UrunService.searchProductByName(UrunService.products);
                             break;
                         case 4:
+                            System.out.println("4- Ürünleri filtreleme (max,min,A dan - Z ye )");
+                            UrunService.MusterilistProductWithSorting(UrunService.products);
                             //tek bir ürünü listeleme id si verilen(ürün arıyor)
                             break;
                         case 5:
+                            System.out.println("5-Urun secimi ve Alisveris Sepetine Ekleme");
                             //Siparis Tamamlama ve Odeme Islemleri
                             break;
                         case 6:
+                            System.out.println("6-Kargo secimi ve ödeme secenekleri");
+
                             break;
                         case 7:
+                            System.out.println("7-Urun iptal ve Urun iade");
+
                             break;
                         case 8:
+                            System.out.println("8-Siparis Tamamlama ve Odeme Islemleri");
+
                             break;
                         case 9:
+                            System.out.println("8-Siparis Tamamlama ve Odeme Islemleri");
+
+                            break;
+                        case 10:
+                            System.out.println("10-Urun degerlendirme ve yorum");
+
                             break;
                         case 0:
                             isExist = true;

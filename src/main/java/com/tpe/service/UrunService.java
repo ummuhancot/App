@@ -4,6 +4,8 @@ import com.tpe.domain.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class UrunService  {
     // Ürünlerin saklanacağı Map, LinkedHashMap kullanılarak eklenme sırası korunur
@@ -14,7 +16,7 @@ public class UrunService  {
 
 
 
-
+    //System.out.println("1- Bir ürün tanımlayın");
     public static void addProduct(Map<String, Urun> products) {
 
 
@@ -44,7 +46,8 @@ public class UrunService  {
             System.out.print("Ürün Kol Tipi : ");
             String ÜrünKolTipi = sc.nextLine().toUpperCase().trim();
             System.out.print("Ürün Boy Uzunluğu : ");
-            String ÜrünBoyUzunluğu = sc.nextLine().toUpperCase().trim();
+            Integer ÜrünBoyUzunluğu = sc.nextInt();
+            sc.nextLine();
 
             //Ürün Teknik Alanı
             System.out.print("Ürün Stok Durum : ");
@@ -78,9 +81,7 @@ public class UrunService  {
             } while (productQuantity <= 0);
 
 
-            Urun urun = new Urun(ÜrünAdı,kategori,fiyat,new UrunTeknikAlanı(),new UrunOzellikleri());
-            UrunOzellikleri urunOzellikleri = new UrunOzellikleri(Beden,renk,malzeme,ÜrünKolTipi,ÜrünBoyUzunluğu);
-            UrunTeknikAlanı urunTeknikAlanı = new UrunTeknikAlanı(ÜrünStokDurumu,ÜrünÜretici);
+            Urun urun = new Urun(ÜrünAdı,kategori,fiyat,Beden,renk,malzeme,ÜrünKolTipi,ÜrünBoyUzunluğu,ÜrünStokDurumu,ÜrünÜretici);
 
 
 
@@ -88,24 +89,16 @@ public class UrunService  {
             urun.setÜrünAdı(ÜrünAdı);
             urun.setKategori(kategori);
             urun.setFiyat(fiyat);
-            urunOzellikleri.setBeden(Beden);
-            urunOzellikleri.setMalzeme(malzeme);
-            urunOzellikleri.setRenk(renk);
-            urunOzellikleri.setKolTipi(ÜrünKolTipi);
-            urunOzellikleri.setBoyUzunlugu(ÜrünBoyUzunluğu);
-            urun.setUrunOzellikleri(urunOzellikleri);
-            urunTeknikAlanı.setUretici(ÜrünÜretici);
-            urunTeknikAlanı.setStokDurumu(ÜrünStokDurumu);
-            urun.setUrunTeknikAlanı(urunTeknikAlanı);
+
             productId(urun);
+
             // Ürün ID'sini ayarla
 
             // Ürünü Map'e ekle
             products.put(urun.getÜrünKodu(), urun);
 
             System.out.println(urun);
-            System.out.println(urunOzellikleri);
-            System.out.println(urunTeknikAlanı);
+
             System.out.println(urun.getÜrünKodu());
 
             // İşleme devam veya çıkış seçeneği sunma
@@ -161,19 +154,235 @@ public class UrunService  {
         List<Urun> urunList =new ArrayList<>(products.values());
         for (Urun product : urunList) {
             // Eğer ürün miktarı 0 ise kırmızı renkte yazdır
-            if (product.getUrunTeknikAlanı().getStokDurumu() == 0) {
+            if (product.getStokDurumu() == 0) {
                 System.err.println("\n"+product.getÜrünKodu()+"\n"+product.getÜrünAdı()+"\n"+product.getFiyat()+"\n"+product.getKategori()+"\n");
+
             } else {
                 System.out.println("\n"+product.getÜrünKodu()+"\n"+product.getÜrünAdı()+"\n"+product.getFiyat()+"\n"+product.getKategori()+"\n");
+
                 System.err.println("calıştı");
             }
         }
     }
 
-    public void enterProduct(Map<String, Urun> products) {
+    //System.out.println("5- Ürünleri filtreleme (max,min,A dan - Z ye )");
+    public static void AdminlistProductWithSorting(Map<String, Urun> product) {
+        // Kullanıcıdan sıralama tercihini al
+        Scanner sc = new Scanner(System.in);
+        int select = -1;
+
+        while (select == -1) { // Geçerli bir seçim yapılana kadar döngü
+            try {
+                System.out.println("Choose sorting criteria: ");
+                System.out.println("1. Sort by Quantity");
+                System.out.println("2. Sort by Shelf Number");
+                System.out.println("3. Sort by Product Name");
+                System.out.println("4. Sort by Productor Name");  // Üretici ismine göre sıralama seçeneği
+                System.out.print("Enter your choice (1-4): ");
+                select = sc.nextInt();
+
+                // Geçersiz seçim kontrolü
+                if (select < 1 || select > 3) {
+                    System.out.println("Invalid choice. Please enter a number between 1 and 3.");
+                    select = -1; // Döngüyü tekrar çalıştırmak için choice değeri sıfırlanır
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number between 1 and 3.");
+                sc.nextLine(); // Geçersiz girdiyi temizlemek için
+                select = -1; // Döngüyü tekrar çalıştırmak için choice değeri sıfırlanır
+            }
+
+
+            List<Urun> productList = new ArrayList<>(products.values());
+
+            // Seçilen tercihe göre sıralama
+            switch (select) {
+                case 1: // max göre sıralama
+                    maximum(productList);
+                    break;
+                case 2: // min numarasına göre sıralama
+                    minimum(productList);
+                    break;
+                case 3: // Ürün ismine göre sıralama
+                    sortAndRemoveAorZ1(productList);
+                    break;
+            }
+        }
 
     }
+    public static void minimum(List<Urun> nums) {
+        // Küçükten büyüğe sıralama (fiyatlara göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparingInt(Urun::getFiyat))
+                .collect(Collectors.toList());
 
+        System.out.println("Küçükten büyüğe sıralanmış ürünler: " + sıralıListe);
+
+        // En düşük fiyatı bulma
+        int minFiyat = nums.stream()
+                .mapToInt(Urun::getFiyat)
+                .min()
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En düşük fiyatlı ürünleri yazdırma
+        nums.stream().filter(product -> product.getFiyat() == minFiyat) // Fiyatı minFiyat olan ürünleri filtrele
+                .forEach(product -> {
+                    // Ürün bilgilerini yazdırma
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori()+
+                            "\nBeden: " +product.getBeden()+
+                            "\nRenk:"+product.getRenk()+
+                            "\nMalzeme"+product.getMalzeme()+
+                            "\nKol Tipi"+product.getKolTipi()+
+                            "\nBoy Uzunlugu"+product.getBoyUzunlugu()+
+                            "\nÜretici"+product.getUretici()+
+                            "\nStok Durumu"+product.getStokDurumu()+
+                            "\n");
+                });
+    }
+    public static void maximum(List<Urun> nums) {
+        // Büyükten küçüğe sıralama (fiyatlara göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparingInt(Urun::getFiyat).reversed())
+                .collect(Collectors.toList());
+
+        System.out.println("Büyükten küçüğe sıralanmış ürünler: " + sıralıListe);
+
+        // En yüksek fiyatı bulma
+        int maxFiyat = nums.stream()
+                .mapToInt(Urun::getFiyat)
+                .max()
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En yüksek fiyatlı ürünleri yazdırma
+        nums.stream()
+                .filter(product -> product.getFiyat() == maxFiyat) // Fiyatı maxFiyat olan ürünleri filtrele
+                .forEach(product -> {
+                    // Ürün bilgilerini yazdırma
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori()+
+                            "\nBeden: " +product.getBeden()+
+                            "\nRenk:"+product.getRenk()+
+                            "\nMalzeme"+product.getMalzeme()+
+                            "\nKol Tipi"+product.getKolTipi()+
+                            "\nBoy Uzunlugu"+product.getBoyUzunlugu()+
+                            "\nÜretici"+product.getUretici()+
+                            "\nStok Durumu"+product.getStokDurumu()+
+                            "\n");
+                });
+    }
+
+    public static void sortAndRemoveAorZ1(List<Urun> nums) {
+        // "A" ile başlayan veya "Z" ile biten ürünleri kaldır
+        //nums.removeIf(product -> product.getÜrünAdı().startsWith("A") || product.getÜrünAdı().endsWith("Z"));
+
+        // A'dan Z'ye sıralama (ürün adlarına göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparing(Urun::getÜrünAdı))
+                .collect(Collectors.toList());
+
+        System.out.println("A'dan Z'ye sıralanmış ürünler: " + sıralıListe);
+
+        // Alfabetik olarak ilk sıradaki ürün(ler)in adını bulma
+        String minÜrünAdı = nums.stream()
+                .map(Urun::getÜrünAdı)
+                .min(String::compareTo)
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En küçük ada sahip ürün(ler)i yazdırma
+        nums.stream()
+                .filter(product -> product.getÜrünAdı().equals(minÜrünAdı)) // Ürün adını eşleşmeye göre filtrele
+                .forEach(product -> {
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori()+
+                            "\nBeden: " +product.getBeden()+
+                            "\nRenk:"+product.getRenk()+
+                            "\nMalzeme"+product.getMalzeme()+
+                            "\nKol Tipi"+product.getKolTipi()+
+                            "\nBoy Uzunlugu"+product.getBoyUzunlugu()+
+                            "\nÜretici"+product.getUretici()+
+                            "\nStok Durumu"+product.getStokDurumu()+
+                            "\n");
+                });
+    }
+
+    // System.out.println("3- tüm ürünleri listeleyiniz");
+    public static void enterProduct(Map<String, Urun> products) {
+// Ürünleri listele
+        List<Urun> productList = new ArrayList<>(products.values());
+
+        for (Urun product : productList) {
+            // Eğer ürün miktarı 0 ise kırmızı renkte yazdır
+            if (product.getStokDurumu() == 0) {
+                System.err.println(product.getÜrünKodu()+"\n"+ product.getÜrünAdı()+"\n"+ product.getUretici()+"\n"+ product.getStokDurumu()+"\n"+
+                        product.getFiyat()+"\n"+ product.getKategori()+"\n"+product.getBeden()+"\n"+product.getRenk()+"\n"+product.getKolTipi()+"\n"+ product.getBoyUzunlugu());
+            } else {
+                System.out.println(product.getÜrünKodu()+"\n"+ product.getÜrünAdı()+"\n"+ product.getUretici()+"\n"+ product.getStokDurumu()+"\n"+
+                        product.getFiyat()+"\n"+ product.getKategori()+"\n"+product.getBeden()+"\n"+product.getRenk()+"\n"+product.getKolTipi()+"\n"+ product.getBoyUzunlugu());
+            }
+        }
+    }
+    //System.out.println("2- id si verilen Ürünleri listele");
+    public static void listIdProduct(Map<String, Urun> products) {
+        // Kullanıcıdan ürün adını al
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Görüntülemek istediğiniz ürün adını girin: ");
+        String searchedName = scanner.nextLine().trim();
+
+        // Ürünleri ara ve eşleşenleri yazdır
+        boolean found = false;
+        for (Urun product : products.values()) {
+            if (product.getÜrünAdı().equalsIgnoreCase(searchedName)) {
+                found = true;
+                if (product.getStokDurumu() == 0) {
+                    // Stok durumu 0 ise kırmızı renkte yazdır
+                    System.err.println("\nÜrün Bulundu:\n" +
+                            "Ürün Kodu: " + product.getÜrünKodu() + "\n" +
+                            "Ürün Adı: " + product.getÜrünAdı() + "\n" +
+                            "Fiyat: " + product.getFiyat() + "\n" +
+                            "Kategori: " + product.getKategori() + "\n");
+                } else {
+                    // Stok durumu 0 değilse normal yazdır
+                    System.out.println("\nÜrün Bulundu:\n" +
+                            "Ürün Kodu: " + product.getÜrünKodu() + "\n" +
+                            "Ürün Adı: " + product.getÜrünAdı() + "\n" +
+                            "Fiyat: " + product.getFiyat() + "\n" +
+                            "Kategori: " + product.getKategori() + "\n");
+                }
+            }
+        }
+
+        // Ürün bulunamazsa bilgi mesajı ver
+        if (!found) {
+            System.err.println("Aradığınız isimde bir ürün bulunamadı.");
+        }
+    }
+
+    //System.out.println("4- id si verilen ürünü silme ");
+    public static void deleteProductById(Map<String, Urun> products) {
+        // Kullanıcıdan ürün ID'sini al
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Silmek istediğiniz ürün ID'sini girin: ");
+        String productId = scanner.nextLine().trim();
+
+        // Map'ten ürün ID'sine göre sil
+        if (products.containsKey(productId)) {
+            Urun removedProduct = products.remove(productId);
+            System.out.println("Ürün başarıyla silindi:\n" +
+                    "Ürün Kodu: " + removedProduct.getÜrünKodu() + "\n" +
+                    "Ürün Adı: " + removedProduct.getÜrünAdı() + "\n" +
+                    "Fiyat: " + removedProduct.getFiyat() + "\n" +
+                    "Kategori: " + removedProduct.getKategori() + "\n");
+        } else {
+            System.err.println("Bu ID'ye sahip bir ürün bulunamadı.");
+        }
+    }
 
     public void putProductOnShelf(Map<String, Urun> products) {
 
@@ -193,4 +402,159 @@ public class UrunService  {
     public void clearProducts(Map<String, Urun> products) {
 
     }
+
+    //System.out.println("3-Ürün ismine göre arama yap");
+    public static void searchProductByName(Map<String, Urun> products) {
+        // Kullanıcıdan ürün adını al
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Aramak istediğiniz ürün adını girin: ");
+        String productName = scanner.nextLine().trim();
+
+        // Ürün arama
+        boolean found = false;
+        for (Urun product : products.values()) {
+            if (product.getÜrünAdı().equalsIgnoreCase(productName)) {
+                found = true;
+                System.out.println("\nÜrün Bulundu:\n" +
+                        "Ürün Kodu: " + product.getÜrünKodu() + "\n" +
+                        "Ürün Adı: " + product.getÜrünAdı() + "\n" +
+                        "Fiyat: " + product.getFiyat() + "\n" +
+                        "Kategori: " + product.getKategori() + "\n" +
+                        "Stok Durumu: " + product.getStokDurumu() + "\n");
+            }
+        }
+
+        // Eğer ürün bulunamazsa mesaj göster
+        if (!found) {
+            System.err.println("Aradığınız isimde bir ürün bulunamadı.");
+        }
+    }
+
+    //System.out.println("3-Ürün ismine göre arama yap");
+    //Tercihe göre sıralı liste ----> müsteri kısmına koy
+    public static void MusterilistProductWithSorting(Map<String, Urun> product) {
+        // Kullanıcıdan sıralama tercihini al
+        Scanner sc = new Scanner(System.in);
+        int select = -1;
+
+        while (select == -1) { // Geçerli bir seçim yapılana kadar döngü
+            try {
+                System.out.println("Choose sorting criteria: ");
+                System.out.println("1. Sort by Quantity");
+                System.out.println("2. Sort by Shelf Number");
+                System.out.println("3. Sort by Product Name");
+                System.out.println("4. Sort by Productor Name");  // Üretici ismine göre sıralama seçeneği
+                System.out.print("Enter your choice (1-4): ");
+                select = sc.nextInt();
+
+                // Geçersiz seçim kontrolü
+                if (select < 1 || select > 3) {
+                    System.out.println("Invalid choice. Please enter a number between 1 and 3.");
+                    select = -1; // Döngüyü tekrar çalıştırmak için choice değeri sıfırlanır
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number between 1 and 3.");
+                sc.nextLine(); // Geçersiz girdiyi temizlemek için
+                select = -1; // Döngüyü tekrar çalıştırmak için choice değeri sıfırlanır
+            }
+
+
+            List<Urun> productList = new ArrayList<>(products.values());
+
+            // Seçilen tercihe göre sıralama
+            switch (select) {
+                case 1: // max göre sıralama
+                    maximum1(productList);
+                    break;
+                case 2: // min numarasına göre sıralama
+                    minimum1(productList);
+                    break;
+                case 3: // Ürün ismine göre sıralama
+                    sortAndRemoveAorZ(productList);
+                    break;
+            }
+        }
+
+    }
+
+    public static void minimum1(List<Urun> nums) {
+        // Küçükten büyüğe sıralama (fiyatlara göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparingInt(Urun::getFiyat))
+                .collect(Collectors.toList());
+
+        System.out.println("Küçükten büyüğe sıralanmış ürünler: " + sıralıListe);
+
+        // En düşük fiyatı bulma
+        int minFiyat = nums.stream()
+                .mapToInt(Urun::getFiyat)
+                .min()
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En düşük fiyatlı ürünleri yazdırma
+        nums.stream().filter(product -> product.getFiyat() == minFiyat) // Fiyatı minFiyat olan ürünleri filtrele
+                .forEach(product -> {
+                    // Ürün bilgilerini yazdırma
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori() + "\n");
+                });
+    }
+
+    public static void maximum1(List<Urun> nums) {
+        // Büyükten küçüğe sıralama (fiyatlara göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparingInt(Urun::getFiyat).reversed())
+                .collect(Collectors.toList());
+
+        System.out.println("Büyükten küçüğe sıralanmış ürünler: " + sıralıListe);
+
+        // En yüksek fiyatı bulma
+        int maxFiyat = nums.stream()
+                .mapToInt(Urun::getFiyat)
+                .max()
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En yüksek fiyatlı ürünleri yazdırma
+        nums.stream()
+                .filter(product -> product.getFiyat() == maxFiyat) // Fiyatı maxFiyat olan ürünleri filtrele
+                .forEach(product -> {
+                    // Ürün bilgilerini yazdırma
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori() + "\n");
+                });
+    }
+
+    public static void sortAndRemoveAorZ(List<Urun> nums) {
+        // "A" ile başlayan veya "Z" ile biten ürünleri kaldır
+        //nums.removeIf(product -> product.getÜrünAdı().startsWith("A") || product.getÜrünAdı().endsWith("Z"));
+
+        // A'dan Z'ye sıralama (ürün adlarına göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparing(Urun::getÜrünAdı))
+                .collect(Collectors.toList());
+
+        System.out.println("A'dan Z'ye sıralanmış ürünler: " + sıralıListe);
+
+        // Alfabetik olarak ilk sıradaki ürün(ler)in adını bulma
+        String minÜrünAdı = nums.stream()
+                .map(Urun::getÜrünAdı)
+                .min(String::compareTo)
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En küçük ada sahip ürün(ler)i yazdırma
+        nums.stream()
+                .filter(product -> product.getÜrünAdı().equals(minÜrünAdı)) // Ürün adını eşleşmeye göre filtrele
+                .forEach(product -> {
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori() + "\n");
+                });
+    }
+
+
 }
