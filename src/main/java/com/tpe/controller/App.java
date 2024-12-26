@@ -1,8 +1,10 @@
 package com.tpe.controller;
 
 
+import com.tpe.domain.Sepet;
 import com.tpe.domain.Urun;
 import com.tpe.service.AdminService;
+import com.tpe.service.SepetService;
 import com.tpe.service.UrunService;
 import com.tpe.service.UserService;
 
@@ -182,7 +184,7 @@ public class App {
                             //müsteri Kayit Islemleri
                             break;
                         case 2:
-                            System.out.println("2-kayıtlı müsteri menüsü Ana menüye yönlendirildi ");
+                            System.out.println("2-kayıtlı olmayan müsteri müsteri menüsü Ana menüye yönlendirildi ");
                             //kayıtlı müsteri menüsü
                             System.out.println("Ana menüye yönlendiriliyor");
                             MüsteriIslemleriMethod();
@@ -199,7 +201,33 @@ public class App {
                         case 5:
                             System.out.println("5-Urun secimi ve Alisveris Sepetine Ekleme");
                             //Siparis Tamamlama ve Odeme Islemleri
+                            // Kullanıcıdan ID al
+
+                            System.out.println("Bir ürün ID'si giriniz:");
+                            String urunID = input.nextLine(); // Kullanıcıdan ID al
+
+                            // Ürün listesi kontrolü
+                            if (SepetService.urunList == null) {
+                                System.out.println("Ürün listesi boş!");
+                                break;
+                            }
+
+                            // ID'ye göre ürün bulma
+                            Urun urun = SepetService.urunList.get(Integer.parseInt(urunID)); // ID ile ürünü al
+                            if (urun == null) {
+                                System.out.println("Girilen ID'ye ait ürün bulunamadı!");
+                                break;
+                            }
+
+                            if (urun != null) {
+                                SepetService.MusteriSepeteEklemeUrunYazdirVeRaporOlustur(urun); // Ürün bilgilerini yazdır ve rapor oluştur
+                            } else {
+                                System.out.println("Geçerli bir ürün ID'si bulunamadı.");
+                            }
+                            // Ürünü yazdır ve rapor oluştur
+                            SepetService.MusteriSepeteEklemeUrunYazdirVeRaporOlustur(urun);
                             break;
+
                         case 6:
                             System.out.println("6-Kargo secimi ve ödeme secenekleri");
 
@@ -238,8 +266,8 @@ public class App {
                 boolean isExist = false;
                 while (!isExist) {
                     System.out.println("========================================================");
-                    System.out.println("1-kayıtlı olmayan kullanıcı icin menu Urun görüntüleme");
-                    System.out.println("2-tek bir urunun listeleme id si verilen(ürün arıyor)");
+                    System.out.println("1-Ürün ismine göre arama yap");
+                    System.out.println("2-Ürünleri filtreleme (max,min,A dan - Z ye )");
                     System.out.println("3-müsteri Kayit Islemleri yönlendir");
                     System.out.println("0-ÇIKIŞ");
 
@@ -248,17 +276,17 @@ public class App {
 
                     switch (select) {
                         case 1:
-                            //adminin tek bir ürünü listele methodunu cağırıcaz
-                            //adminin tüm ürünleri listele methodunu cağrıcaz
-                            //ik ürün kayıt yapcaz ürün listeleme methodunu cağrıcaz admin kısmından
-                            //kayıtlı olmayan kullanıcı icin menu Urun görüntüleme
+                            System.out.println("1-Ürün ismine göre arama yap");
+                            UrunService.searchProductByName(UrunService.products);
 
                             break;
                         case 2:
-                            //tek bir ürünü listeleme id si verilen(ürün arıyor)
+                            System.out.println("2-Ürünleri filtreleme (max,min,A dan - Z ye )");
+                            UrunService.MusterilistProductWithSorting(UrunService.products);
                             break;
                         case 3:
                             //müsteri Kayit Islemleri yönlendir
+                            //müsteri ürün almak isterse 1 e basıp kayıt olmalıdır.
                             System.out.println("Kayıt olmak icin 1 e basınız.");
                             MüsteriIslemleriMethod();
                             break;
