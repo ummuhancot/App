@@ -1,5 +1,8 @@
 package com.tpe.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*Sepet İşlemleri:
 Sepete Eklenen Miktar (Cart Quantity): Kullanıcının sepete eklediği ürün miktarı.
 
@@ -11,8 +14,7 @@ public class Sepet extends Urun{
 
     //sepet
     private Integer sepetID;
-    private int sepetEklenenMiktar;
-
+    private Map<Urun, Integer> products;
     //satış
     private String tarih;
     private String satisDurumu;
@@ -31,12 +33,17 @@ public class Sepet extends Urun{
 
     public Sepet() {
     }
-    public Sepet(Integer sepetID, int sepetEklenenMiktar, String tarih, String satisDurumu, String tamamlandı, String krediCart, String kapıdaOdeme, String faturaBilgileri, String kargoTakipNo, String teslimatSüresi, String kargoUcreti, String yurtici, String yurtdısı, String kargoDurumu) {
+
+    public Sepet(int sepetID) {
+    }
+
+    public Sepet(String ürünAdı, String kategori, Integer fiyat, String beden, String renk, String malzeme, String kolTipi, Integer boyUzunlugu, int stokDurumu, String uretici, Integer sepetID, Map<Urun, Integer> products, String tarih, String satisDurumu, String tamamlandı, String krediCart, String kapıdaOdeme, String faturaBilgileri, String kargoTakipNo, String teslimatSüresi, String kargoUcreti, String yurtici, String yurtdısı, String kargoDurumu) {
+        super(ürünAdı, kategori, fiyat, beden, renk, malzeme, kolTipi, boyUzunlugu, stokDurumu, uretici);
         this.sepetID = sepetID;
-        this.sepetEklenenMiktar = sepetEklenenMiktar;
+        this.products = products;
         this.tarih = tarih;
         this.satisDurumu = satisDurumu;
-        Tamamlandı = tamamlandı;
+        this.Tamamlandı = tamamlandı;
         this.krediCart = krediCart;
         this.kapıdaOdeme = kapıdaOdeme;
         this.faturaBilgileri = faturaBilgileri;
@@ -48,6 +55,12 @@ public class Sepet extends Urun{
         this.kargoDurumu = kargoDurumu;
     }
 
+    public Sepet(Integer sepetID, Map<Urun, Integer> products) {
+        this.sepetID = sepetID;
+        this.products = new HashMap<>();
+
+    }
+
     public Integer getSepetID() {
         return sepetID;
     }
@@ -56,12 +69,12 @@ public class Sepet extends Urun{
         this.sepetID = sepetID;
     }
 
-    public int getSepetEklenenMiktar() {
-        return sepetEklenenMiktar;
+    public Map<Urun, Integer> getProducts() {
+        return products;
     }
 
-    public void setSepetEklenenMiktar(int sepetEklenenMiktar) {
-        this.sepetEklenenMiktar = sepetEklenenMiktar;
+    public void setProducts(Map<Urun, Integer> products) {
+        this.products = products;
     }
 
     public String getTarih() {
@@ -164,7 +177,7 @@ public class Sepet extends Urun{
     public String toString() {
         return "Sepet{" +
                 "sepetID=" + sepetID +
-                ", sepetEklenenMiktar=" + sepetEklenenMiktar +
+                ", products=" + products +
                 ", tarih='" + tarih + '\'' +
                 ", satisDurumu='" + satisDurumu + '\'' +
                 ", Tamamlandı='" + Tamamlandı + '\'' +

@@ -1,61 +1,102 @@
 package com.tpe.service;
 
+import com.tpe.domain.Sepet;
 import com.tpe.domain.Urun;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class SepetService {
 
-    public static Map<String, Urun> products = new LinkedHashMap<>();
-    public static List<Urun> urunList = new ArrayList<>();
-    public static Scanner sc = new Scanner(System.in);
-    private static final String DOSYA_ADI = "tek_urun_raporu.txt";
+    private static Map<Integer, Sepet> sepetler = new HashMap<>();
+    private static Scanner sc = new Scanner(System.in);
 
-    //13-tüm öğrencilerin ad-soyad bilgilerini rapora yazdıralım
-            // Tek bir ürünün bilgilerini yazdıran ve rapor oluşturan metot
-     public static void MusteriSepeteEklemeUrunYazdirVeRaporOlustur(Urun urun) {
-         // Ürünü dosyaya yaz
-         try (FileWriter yazici = new FileWriter(DOSYA_ADI)) {
-             yazici.write("*** Tek Ürün Raporu ***\n");
-             yazici.write("-----------------------\n");
-             yazici.write("Ürün Kodu: " + urun.getÜrünKodu() + "\n");
-             yazici.write("Ad: " + urun.getÜrünAdı() + "\n");
-             yazici.write("Kategori: " + urun.getKategori() + "\n");
-             yazici.write("Fiyat: " + urun.getFiyat() + "\n");
-             yazici.write("Beden: " + urun.getBeden() + "\n");
-             yazici.write("Renk: " + urun.getRenk() + "\n");
-             yazici.write("Malzeme: " + urun.getMalzeme() + "\n");
-             yazici.write("Kol Tipi: " + urun.getKolTipi() + "\n");
-             yazici.write("Boy Uzunluğu: " + urun.getBoyUzunlugu() + "\n");
-             yazici.write("Stok Durumu: " + urun.getStokDurumu() + "\n");
-             yazici.write("Üretici: " + urun.getUretici() + "\n");
 
-             System.out.println("Rapor başarıyla oluşturuldu ve " + DOSYA_ADI + " dosyasına kaydedildi.");
-         } catch (IOException e) {
-             throw new RuntimeException("Rapor oluşturulurken hata oluştu", e);
-         }
-         if (urun == null) {
-             System.out.println("Ürün bilgisi bulunamadı.");
-             return;
-         }
-         // Dosyayı oku ve içeriği göster
-         System.out.println("\n*** Tek Ürün Raporu ***");
-         try (BufferedReader okuyucu = new BufferedReader(new FileReader(DOSYA_ADI))) {
-             String satir;
-             while ((satir = okuyucu.readLine()) != null) {
-                 System.out.println(satir);
-             }
-         } catch (IOException e) {
-             throw new RuntimeException("Rapor dosyası okunurken hata oluştu", e);
-         }
+    public static List<Urun> sepetList = new ArrayList<>();
 
-     }
+    // addProduct metodu
+    public static void addProduct(Map<Integer, Sepet> sepetler, Urun urun, int miktar, Sepet sepet) {
+        if (urun != null) {
+            sepet.getProducts().put(urun, sepet.getUrunler().getOrDefault(urun, 0) + miktar);
+            System.out.println("Ürün sepete eklendi: " + urun.getÜrünAdı() + " (Miktar: " + miktar + ")");
+        } else {
+            System.out.println("Ürün bulunamadı!");
+        }
+    }
+
+    // manageCart metodu
+    public static void manageCart(Map<String, Urun> products, Map<Integer, Sepet> sepetler) {
+        int sepetID;
+        System.out.println("Sepet ID oluşturmak için bir sayı girin:");
+        sepetID = sc.nextInt();
+        sc.nextLine(); // Satır sonu temizleme
+
+        // Yeni sepet oluştur veya mevcut olanı al
+        Sepet sepet = sepetler.getOrDefault(sepetID, new Sepet(sepetID));
+        sepetler.put(sepetID, sepet);
+
+        int choice;
+        do {
+            System.out.println("Mevcut ürünlerden sepete eklemek için ürün kodunu girin:");
+            String productCode = sc.nextLine().toUpperCase().trim();
+            Urun urun = products.get(productCode);
+
+            if (urun != null) {
+                System.out.println("Sepete eklenecek miktarı girin:");
+                int miktar;
+                try {
+                    miktar = sc.nextInt();
+                    sc.nextLine(); // Satır sonu temizleme
+
+                    if (miktar > 0) {
+                        // addProduct çağrılırken uygun parametreler ile çağrılıyor
+                        addProduct(sepetler, urun, miktar, sepet);
+                    } else {
+                        System.out.println("Miktar pozitif bir sayı olmalıdır.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Geçersiz giriş! Lütfen bir sayı girin.");
+                    sc.nextLine(); // Hatalı girişi temizle
+                }
+            } else {
+                System.out.println("Ürün bulunamadı. Lütfen geçerli bir ürün kodu girin.");
+            }
+
+            System.out.println("1- Sepete ürün eklemeye devam et\n0- Çıkış yap ve dosyaya kaydet");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine(); // Satır sonu temizleme
+            } catch (InputMismatchException e) {
+                System.out.println("Geçersiz giriş! Lütfen 0 veya 1 girin.");
+                sc.nextLine(); // Hatalı girişi temizle
+                choice = 1; // Döngüyü devam ettir
+            }
+        } while (choice != 0);
+
+        saveCartToTxt(sepet, products);
+    }
+
+
+
+
+    public static void saveCartToTxt(Sepet sepet, Map<String, Urun> products) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("sepet.txt"))) {
+            for (Map.Entry<Urun, Integer> entry : sepet.getProducts().entrySet()) {
+                Urun urun = entry.getKey();
+                int miktar = entry.getValue();
+                writer.write("Ürün Kodu: " + urun.getÜrünKodu() +
+                        " | Adı: " + urun.getÜrünAdı() +
+                        " | Miktar: " + miktar +
+                        " | Fiyat: " + urun.getFiyat() + "\n");
+            }
+            System.out.println("Sepet başarıyla dosyaya kaydedildi.");
+        } catch (IOException e) {
+            System.err.println("Dosya yazılırken hata oluştu: " + e.getMessage());
+        }
+    }
 
 }
+
 
 
 

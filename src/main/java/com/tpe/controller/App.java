@@ -10,6 +10,9 @@ import com.tpe.service.UserService;
 
 import java.util.*;
 
+import static com.tpe.service.UrunService.addProduct;
+import static com.tpe.service.UrunService.products;
+
 public class App {
 
     public static Scanner input = new Scanner(System.in);
@@ -202,30 +205,10 @@ public class App {
                             System.out.println("5-Urun secimi ve Alisveris Sepetine Ekleme");
                             //Siparis Tamamlama ve Odeme Islemleri
                             // Kullanıcıdan ID al
+                            SepetService.manageCart(products);
+                            Sepet sepet = new Sepet();
+                            SepetService.saveCartToTxt(sepet);
 
-                            System.out.println("Bir ürün ID'si giriniz:");
-                            String urunID = input.nextLine(); // Kullanıcıdan ID al
-
-                            // Ürün listesi kontrolü
-                            if (SepetService.urunList == null) {
-                                System.out.println("Ürün listesi boş!");
-                                break;
-                            }
-
-                            // ID'ye göre ürün bulma
-                            Urun urun = SepetService.urunList.get(Integer.parseInt(urunID)); // ID ile ürünü al
-                            if (urun == null) {
-                                System.out.println("Girilen ID'ye ait ürün bulunamadı!");
-                                break;
-                            }
-
-                            if (urun != null) {
-                                SepetService.MusteriSepeteEklemeUrunYazdirVeRaporOlustur(urun); // Ürün bilgilerini yazdır ve rapor oluştur
-                            } else {
-                                System.out.println("Geçerli bir ürün ID'si bulunamadı.");
-                            }
-                            // Ürünü yazdır ve rapor oluştur
-                            SepetService.MusteriSepeteEklemeUrunYazdirVeRaporOlustur(urun);
                             break;
 
                         case 6:
