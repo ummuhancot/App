@@ -1,6 +1,7 @@
 package com.tpe.domain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*Sepet İşlemleri:
@@ -13,8 +14,8 @@ Sepet ID (Cart ID): Sepeti benzersiz şekilde tanımlayan ID.
 public class Sepet extends Urun{
 
     //sepet
-    private Integer sepetID;
-    private Map<Urun, Integer> products;
+    private static List<Urun> products;
+
     //satış
     private String tarih;
     private String satisDurumu;
@@ -34,13 +35,11 @@ public class Sepet extends Urun{
     public Sepet() {
     }
 
-    public Sepet(int sepetID) {
-    }
 
-    public Sepet(String ürünAdı, String kategori, Integer fiyat, String beden, String renk, String malzeme, String kolTipi, Integer boyUzunlugu, int stokDurumu, String uretici, Integer sepetID, Map<Urun, Integer> products, String tarih, String satisDurumu, String tamamlandı, String krediCart, String kapıdaOdeme, String faturaBilgileri, String kargoTakipNo, String teslimatSüresi, String kargoUcreti, String yurtici, String yurtdısı, String kargoDurumu) {
+
+    public Sepet(String ürünAdı, String kategori, Integer fiyat, String beden, String renk, String malzeme, String kolTipi, Integer boyUzunlugu, int stokDurumu, String uretici, String tarih, String satisDurumu, String tamamlandı, String krediCart, String kapıdaOdeme, String faturaBilgileri, String kargoTakipNo, String teslimatSüresi, String kargoUcreti, String yurtici, String yurtdısı, String kargoDurumu) {
         super(ürünAdı, kategori, fiyat, beden, renk, malzeme, kolTipi, boyUzunlugu, stokDurumu, uretici);
-        this.sepetID = sepetID;
-        this.products = products;
+
         this.tarih = tarih;
         this.satisDurumu = satisDurumu;
         this.Tamamlandı = tamamlandı;
@@ -55,27 +54,9 @@ public class Sepet extends Urun{
         this.kargoDurumu = kargoDurumu;
     }
 
-    public Sepet(Integer sepetID, Map<Urun, Integer> products) {
-        this.sepetID = sepetID;
-        this.products = new HashMap<>();
-
+    public Sepet(List<Sepet> sepetler, Urun urun, int miktar) {
     }
 
-    public Integer getSepetID() {
-        return sepetID;
-    }
-
-    public void setSepetID(Integer sepetID) {
-        this.sepetID = sepetID;
-    }
-
-    public Map<Urun, Integer> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Map<Urun, Integer> products) {
-        this.products = products;
-    }
 
     public String getTarih() {
         return tarih;
@@ -176,7 +157,6 @@ public class Sepet extends Urun{
     @Override
     public String toString() {
         return "Sepet{" +
-                "sepetID=" + sepetID +
                 ", products=" + products +
                 ", tarih='" + tarih + '\'' +
                 ", satisDurumu='" + satisDurumu + '\'' +
