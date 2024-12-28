@@ -3,121 +3,212 @@ package com.tpe.service;
 import com.tpe.domain.Sepet;
 import com.tpe.domain.Urun;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SepetService {
 
-    private static Map<Integer, Sepet> sepetler = new HashMap<>();
     private static Scanner sc = new Scanner(System.in);
 
+    // Statik Listeler
+    public static List<Sepet> sepetList = new ArrayList<>();
+    public static List<Urun> urunList = new ArrayList<>();
 
-    public static List<Urun> sepetList = new ArrayList<>();
+    // Sepete Ürün Ekleme
+    public static void addToCart(List<Urun> products, List<Sepet> cart) {
+        int select;
 
-    public static void addProduct(List<Sepet> sepetler, Urun urun, int miktar) {
-
-        if (urun != null) {
-            if (urun.getStokDurumu() < miktar) {
-                System.out.println("Ürün stokta yetersiz: " + urun.getÜrünAdı() +
-                        " (Stok: " + urun.getStokDurumu() + ", İstenen: " + miktar + ")");
-                return;
-            }
-
-            boolean mevcut = false;
-            for (Sepet item : sepetler) {
-                if (item.getÜrünKodu().equals(urun.getÜrünKodu())) {
-                    item.setStokDurumu(item.getStokDurumu() + miktar);
-                    mevcut = true;
-                    System.out.println("Sepetteki ürün miktarı güncellendi: " + urun.getÜrünAdı() +
-                            " (Toplam Miktar: " + item.getStokDurumu() + ")");
-                    break;
-                }
-            }
-
-            if (!mevcut) {
-                sepetler.add(new Sepet(sepetler,urun, miktar));
-                System.out.println("Ürün sepete eklendi: " + urun.getÜrünAdı() + " (Miktar: " + miktar + ")");
-            }
-
-            urun.setStokDurumu(urun.getStokDurumu() - miktar); // Stok güncelleme
-        } else {
-            System.out.println("Ürün bulunamadı!");
-        }
-    }
-
-    // manageCart metodu
-    public static void manageCart(List<Urun> products, List<Sepet> sepetler) {
-
-        int choice;
-        Sepet sepet = null;
         do {
-            System.out.println("Mevcut ürünlerden sepete eklemek için ürün kodunu girin:");
-            String productCode = sc.nextLine().toUpperCase().trim();
-            Urun urun = products.get(Integer.parseInt(productCode));
+            boolean hasUnaddedProducts = products.stream()
+                    .anyMatch(product -> product.getStokDurumu() > 0 && cart.stream().noneMatch(item -> item.getUrun().equals(product)));
 
-            if (urun != null) {
-                System.out.println("Sepete eklenecek miktarı girin:");
-                int miktar;
-                try {
-                    miktar = sc.nextInt();
-                    sc.nextLine(); // Satır sonu temizleme
+            if (hasUnaddedProducts) {
+                System.out.println("Stokta olup sepete eklenmemiş ürünler:");
+                listUnaddedProducts(products, cart);
+            } else {
+                System.out.println("Tüm ürünler sepette. Sepeti güncellemek için tüm ürünler listeleniyor:");
+                listCart(cart);
+            }
 
-                    if (miktar > 0) {
-                        // addProduct çağrılırken uygun parametreler ile çağrılıyor
-                        addProduct(sepetler, urun, miktar);
+            System.out.print("Sepete eklemek/güncellemek istediğiniz ürünün ID'sini giriniz: ");
+            String productId = sc.nextLine().trim();
+
+            Urun product = products.stream()
+                    .filter(p -> p.getÜrünKodu().equals(productId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (product != null) {
+                if (product.getStokDurumu() > 0) {
+                    int productQuantity;
+
+                    do {
+                        System.out.print("Eklemek istediğiniz miktarı giriniz (pozitif bir sayı): ");
+                        while (!sc.hasNextInt()) {
+                            System.out.println("Hatalı giriş! Lütfen sayısal bir değer giriniz.");
+                            sc.next();
+                        }
+                        productQuantity = sc.nextInt();
+                        sc.nextLine();
+
+                        if (productQuantity <= 0) {
+                            System.out.println("Miktar pozitif bir sayı olmalıdır.");
+                        } else if (productQuantity > product.getStokDurumu()) {
+                            System.out.println("Stok yetersiz! Maksimum miktar: " + product.getStokDurumu());
+                        }
+                    } while (productQuantity <= 0 || productQuantity > product.getStokDurumu());
+
+                    Sepet existingItem = cart.stream()
+                            .filter(item -> item.getUrun().equals(product))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (existingItem != null) {
+                        existingItem.setMiktar(existingItem.getMiktar() + productQuantity);
+                        System.out.println("Sepetteki ürün miktarı güncellendi: " + product.getÜrünAdı() +
+                                " (Toplam Miktar: " + existingItem.getMiktar() + ")");
                     } else {
-                        System.out.println("Miktar pozitif bir sayı olmalıdır.");
+                        cart.add(new Sepet(product, productQuantity));
+                        System.out.println("Ürün sepete eklendi: " + product.getÜrünAdı() +
+                                " (Miktar: " + productQuantity + ")");
                     }
-                } catch (InputMismatchException e) {
-                    System.out.println("Geçersiz giriş! Lütfen bir sayı girin.");
-                    sc.nextLine(); // Hatalı girişi temizle
+
+                    product.setStokDurumu(product.getStokDurumu() - productQuantity);
+                    System.out.println("Ürün stok durumu güncellendi: " + product.getStokDurumu());
+                } else {
+                    System.out.println("Seçilen ürün stokta yok.");
                 }
             } else {
-                System.out.println("Ürün bulunamadı. Lütfen geçerli bir ürün kodu girin.");
+                System.out.println("Girdiğiniz ürün ID'si listede bulunamadı. Lütfen kontrol ediniz.");
             }
 
-            System.out.println("1- Sepete ürün eklemeye devam et\n0- Çıkış yap ve dosyaya kaydet");
+            System.out.println("Cart list size: " + products.size());
+            System.out.println("Cart1 list size: " + cart.size());
+
+            saveToFile(products, cart);
+
+            System.out.println("İşleme devam etmek için 1, çıkmak için 0 giriniz:");
             try {
-                choice = sc.nextInt();
-                sc.nextLine(); // Satır sonu temizleme
+                select = sc.nextInt();
+                sc.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Geçersiz giriş! Lütfen 0 veya 1 girin.");
-                sc.nextLine(); // Hatalı girişi temizle
-                choice = 1; // Döngüyü devam ettir
+                System.out.println("Hatalı giriş! Lütfen 0 veya 1 giriniz.");
+                sc.nextLine();
+                select = 1;
             }
-        } while (choice != 0);
+        } while (select != 0);
 
-        saveCartToTxt(sepet, products);
+        listCart(cart);
     }
 
-    public static void saveCartToTxt(List<Sepet> sepetler, List<Urun> products) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("sepet.txt"))) {
-            writer.write("Sepet İçeriği:\n");
-            for (Sepet sepet : sepetler) {
-                Urun urun = sepet.getUrun();
-                int miktar = sepet.getMiktar();
-                writer.write("Ürün Kodu: " + urun.getÜrünKodu() +
-                        " | Adı: " + urun.getÜrünAdı() +
-                        " | Miktar: " + miktar +
-                        " | Fiyat: " + urun.getFiyat() + "\n");
+    public static void sortAndRemoveAorZ1(List<Urun> nums) {
+        // "A" ile başlayan veya "Z" ile biten ürünleri kaldır
+        //nums.removeIf(product -> product.getÜrünAdı().startsWith("A") || product.getÜrünAdı().endsWith("Z"));
+
+        // A'dan Z'ye sıralama (ürün adlarına göre)
+        List<Urun> sıralıListe = nums.stream()
+                .sorted(Comparator.comparing(Urun::getÜrünAdı))
+                .collect(Collectors.toList());
+
+        System.out.println("A'dan Z'ye sıralanmış ürünler: " + sıralıListe);
+
+        // Alfabetik olarak ilk sıradaki ürün(ler)in adını bulma
+        String minÜrünAdı = nums.stream()
+                .map(Urun::getÜrünAdı)
+                .min(String::compareTo)
+                .orElseThrow(() -> new NoSuchElementException("Liste boş!"));
+
+        // En küçük ada sahip ürün(ler)i yazdırma
+        nums.stream()
+                .filter(product -> product.getÜrünAdı().equals(minÜrünAdı)) // Ürün adını eşleşmeye göre filtrele
+                .forEach(product -> {
+                    System.err.println("\nÜrün Kodu: " + product.getÜrünKodu() +
+                            "\nÜrün Adı: " + product.getÜrünAdı() +
+                            "\nFiyat: " + product.getFiyat() +
+                            "\nKategori: " + product.getKategori()+
+                            "\nBeden: " +product.getBeden()+
+                            "\nRenk:"+product.getRenk()+
+                            "\nMalzeme"+product.getMalzeme()+
+                            "\nKol Tipi"+product.getKolTipi()+
+                            "\nBoy Uzunlugu"+product.getBoyUzunlugu()+
+                            "\nÜretici"+product.getUretici()+
+                            "\nStok Durumu"+product.getStokDurumu()+
+                            "\n");
+                });
+    }
+
+    // Sepeti Dosyaya Kaydetme
+    public static void saveToFile(List<Urun> cart, List<Sepet> cart1) {
+        try (FileWriter writer = new FileWriter("sepet.txt")) {
+            System.out.println("Dosya yazmaya başlıyor...");
+
+            // Ürünleri yazdır
+            for (Urun item : cart) {
+                writer.write(item.getÜrünKodu() + " - " +
+                        item.getÜrünAdı() + " - " +
+                        item.getStokDurumu() + "\n");
+                System.out.println("Yazılan ürün: " + item.getÜrünAdı());
             }
 
-            writer.write("\nMevcut Ürünler:\n");
-            for (Urun urun : products) {
-                writer.write("Ürün Kodu: " + urun.getÜrünKodu() +
-                        " | Adı: " + urun.getÜrünAdı() +
-                        " | Stok: " + urun.getStokDurumu() +
-                        " | Fiyat: " + urun.getFiyat() + "\n");
+            // Sepetteki ürünleri yazdır
+            for (Sepet item : cart1) {
+                writer.write(item.getUrun().getÜrünKodu() + " - " +
+                        item.getUrun().getÜrünAdı() + " - " +
+                        item.getMiktar() + "\n");
+                System.out.println("Sepetten yazılan ürün: " + item.getUrun().getÜrünAdı());
             }
 
-            System.out.println("Sepet ve ürün bilgileri başarıyla dosyaya kaydedildi.");
+            System.out.println("Sepet dosyaya başarıyla kaydedildi.");
         } catch (IOException e) {
-            System.err.println("Dosya yazılırken hata oluştu: " + e.getMessage());
+            System.out.println("Sepeti dosyaya kaydederken bir hata oluştu: " + e.getMessage());
         }
     }
 
 
+    // Sepete Eklenmemiş Ürünleri Listeleme
+    public static void listUnaddedProducts(List<Urun> products, List<Sepet> cart) {
+        System.out.println("Sepete eklenmemiş ürünler:");
+        System.out.printf("%-20s %-20s %-15s %-10s%n", "ÜRÜN ID", "ÜRÜN ADI", "STOK", "FİYAT");
+        System.out.printf("%-20s %-20s %-15s %-10s%n", "-------", "--------", "----", "-----");
 
+        boolean found = false;
+        for (Urun product : products) {
+            boolean isInCart = cart.stream().anyMatch(item -> item.getUrun().equals(product));
+            if (product.getStokDurumu() > 0 && !isInCart) {
+                System.out.printf("%-20s %-20s %-15d %-10.2f%n", product.getÜrünKodu(), product.getÜrünAdı(),
+                        product.getStokDurumu(), product.getFiyat());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Tüm ürünler sepette veya stokta yok.");
+        }
+    }
+
+    // Sepeti Listeleme
+    public static void listCart(List<Sepet> cart) {
+        System.out.println("Sepetinizdeki ürünler:");
+        System.out.printf("%-20s %-20s %-15s %-10s %-10s%n", "ÜRÜN ID", "ÜRÜN ADI", "MİKTAR", "FİYAT", "TOPLAM");
+        System.out.printf("%-20s %-20s %-15s %-10s %-10s%n", "-------", "--------", "------", "-----", "------");
+
+        if (cart.isEmpty()) {
+            System.out.println("Sepetiniz boş.");
+            return;
+        }
+
+        for (Sepet item : cart) {
+            double total = item.getMiktar() * item.getUrun().getFiyat();
+            System.out.printf("%-20s %-20s %-15d %-10.2f %-10.2f%n",
+                    item.getUrun().getÜrünKodu(),
+                    item.getUrun().getÜrünAdı(),
+                    item.getMiktar(),
+                    item.getUrun().getFiyat(),
+                    total);
+        }
+    }
 }
 
 

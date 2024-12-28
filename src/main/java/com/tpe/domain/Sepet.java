@@ -1,8 +1,6 @@
 package com.tpe.domain;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /*Sepet İşlemleri:
 Sepete Eklenen Miktar (Cart Quantity): Kullanıcının sepete eklediği ürün miktarı.
@@ -15,7 +13,8 @@ public class Sepet extends Urun{
 
     //sepet
     private static List<Urun> products;
-
+    public Urun urun = new Urun();
+    private static int miktar;
     //satış
     private String tarih;
     private String satisDurumu;
@@ -32,10 +31,24 @@ public class Sepet extends Urun{
     private String yurtdısı;
     private String kargoDurumu;
 
-    public Sepet() {
+    public Sepet(Urun urun, int miktar) {
     }
 
+    public Urun getUrun() {
+        return urun;
+    }
 
+    public void setUrun(Urun urun) {
+        this.urun = urun;
+    }
+
+    public static int getMiktar() {
+        return miktar;
+    }
+
+    public static void setMiktar(int miktar) {
+        Sepet.miktar = miktar;
+    }
 
     public Sepet(String ürünAdı, String kategori, Integer fiyat, String beden, String renk, String malzeme, String kolTipi, Integer boyUzunlugu, int stokDurumu, String uretici, String tarih, String satisDurumu, String tamamlandı, String krediCart, String kapıdaOdeme, String faturaBilgileri, String kargoTakipNo, String teslimatSüresi, String kargoUcreti, String yurtici, String yurtdısı, String kargoDurumu) {
         super(ürünAdı, kategori, fiyat, beden, renk, malzeme, kolTipi, boyUzunlugu, stokDurumu, uretici);

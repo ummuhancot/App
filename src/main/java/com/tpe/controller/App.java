@@ -180,6 +180,7 @@ public class App {
                     int select = input.nextInt();
                     input.nextLine();
 
+                    int miktar;
                     switch (select) {
                         case 1:
                             System.out.println("1-müsteri Kayit Islemleri");
@@ -205,9 +206,11 @@ public class App {
                             System.out.println("5-Urun secimi ve Alisveris Sepetine Ekleme");
                             //Siparis Tamamlama ve Odeme Islemleri
                             // Kullanıcıdan ID al
-                            SepetService.manageCart(products);
-                            Sepet sepet = new Sepet();
-                            SepetService.saveCartToTxt(sepet);
+
+                            SepetService.addToCart(SepetService.urunList,SepetService.sepetList);
+                            SepetService.saveToFile(SepetService.urunList,SepetService.sepetList);
+                            SepetService.listUnaddedProducts(SepetService.urunList,SepetService.sepetList);
+                            SepetService.listCart(SepetService.sepetList);
 
                             break;
 
